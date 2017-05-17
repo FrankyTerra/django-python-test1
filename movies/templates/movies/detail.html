@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ film.film_name }}</title>
+	<script type="text/javascript" src="{% static 'movies/jquery-3.2.1.js' %}"></script>
+	{% load bootstrap3 %}
+	{% bootstrap_css %}
+	{% bootstrap_javascript %}
+	{% bootstrap_messages %}
+	<script type="text/javascript" src="{% static 'movies/comment.js' %}"></script>
+</head>
+<body style="padding-top: 20px; padding-bottom: 20px;">
+<div class="container">
+	<div class="row">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="{% url 'movies:index' %}">Main</a>
+				</div>
+			</div>
+		</nav>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<label>Наименование: {{ film.film_name }}</label><br>
+				<label>Жанр: {{ film.genre }}</label><br>
+				<label>Год выпуска: {{ film.year_of_issue }}</label><br>
+				<label>Страна: {{ film.country }}</label><br>
+				<label>Режиссер: {{ film.producer }}</label><br>
+				<label>Дата выхода: {{ film.pub_date }}</label><br>
+				<label>Актерский состав: {{ film.cast }}</label>
+			</div>
+			<div class="panel-footer" style="text-align: right;">
+				<button class="btn btn-default" onclick="showFormComment();" type="buttons" data-toggle="modal" data-target="#commentModal">Комментировать</button>
+			</div>
+		</div>
+
+		<div id="commentModal" class="modal fade" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        		<h4 class="modal-title">Добавить комментарий</h4>
+		      		</div>
+		      		<div class="modal-body">
+		        		<form class="form form-horizontal" action="{% url 'movies:addcomment' %}" method="post">
+							{% csrf_token %}
+								<input type="hidden" name="film" value="{{ film.id }}">
+								<input type="hidden" id="parent" name="parent" value="">
+								<div class="form-group">
+									<label for="" class="col-sm-3 control-label">Автор</label>
+									<div class="col-sm-9">
+										<input type="text" id="author" name="author" class="form-control" required="required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="" class="col-sm-3 control-label">Комментарий</label>
+									<div class="col-sm-9">
+										<textarea name="text" class="form-control" rows="3" required="required"></textarea>
+									</div>
+								</div>	
+						<form>
+		      		</div>
+		      		<div class="modal-footer">
+		        		<button class="btn btn-default">Отмена</button>
+						<button class="btn btn-primary" type="submit">Отправить</button>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+		<h4>Комментарии:</h4>
+		{% load mptt_tags %}
+		<ul>
+			{% recursetree comments %}
+				<li>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<label>{{ node.author }}</label>
+							<label style="float: right;">{{ node.pub_date }}</label>
+						</div>
+						<div class="panel-body">
+							<label>{{ node.text }}</label>
+						</div>
+						<div class="panel-footer" style="text-align: right;">
+							<button class="btn btn-default" type="button" onclick="showFormComment({{ node.id }});" data-toggle="modal" data-target="#commentModal">Комментировать</button>
+						</div>
+					</div>
+					{% if not node.is_leaf_node %}
+						<ul class="children">
+						{{ children }}
+						</ul>
+					{% endif %}
+				</li>
+			{% endrecursetree %}
+		</ul>
+	</div>
+</div>
+</body>
+</html>
