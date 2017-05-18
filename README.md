@@ -2,10 +2,10 @@
 
 Установка виртуального окружения:
 
-`cd path_to_project_folder/mysite`
-`mkdir venv && echo "Virtualenv directory" > venv/README`
-`git add venv && echo "/venv/" >> .gitignore && git add -f .gitignore`
-`virtualenv --no-site-packages --prompt="(mysite)" venv/mysiteenv`
+`cd path_to_project_folder/mysite`  
+`mkdir venv && echo "Virtualenv directory" > venv/README`  
+`git add venv && echo "/venv/" >> .gitignore && git add -f .gitignore`  
+`virtualenv --no-site-packages --prompt="(mysite)" venv/mysiteenv`  
 
 Активация виртуального окружения:
 
@@ -13,11 +13,11 @@
 
 Установка необходимых пакетов:
 
-`pip install django`
-`pip install django-mptt`
-`pip install django-mptt-admin`
-`pip install django-bootstrap3`
-`pip install django-jquery`
+`pip install django`  
+`pip install django-mptt`  
+`pip install django-mptt-admin`  
+`pip install django-bootstrap3`  
+`pip install django-jquery`  
 
 Список пакетов в requirements.txt
 
